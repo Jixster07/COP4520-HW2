@@ -18,7 +18,7 @@ As the problem stated, each guest is represented by a Guest thread each with the
 
 
 ### Evaluation / Experimentation
-Execution time was recorded 3 times for 4 different levels of N. Ran without printing.
+Execution time was recorded 3 times for 6 different levels of N. Ran without printing.
 
 | N       | avg time (sec) |
 | :---    |    ----:   |
@@ -26,8 +26,12 @@ Execution time was recorded 3 times for 4 different levels of N. Ran without pri
 | 10      | 0.013553867    |
 | 100     | 0.0588007      |
 | 1000    |  0.404372133   |
+| 5000 |4.7465563 |
+|10000|  22.34911477 | 
 
+Processor: Intel i5 8250U @1.6GHz, 4 Cores
 
+This appears to run in O(n^2) time. Given the limitations, I do not see a way to improve run-time.
 ## Problem 2
 file : VaseScenario
 
@@ -37,10 +41,28 @@ file : VaseScenario
 3. run with ```java VaseScenario```
 4. Specify N, the number of guests, as well as whether to print the simulated actions using prompts.
 
-### Solution
+### Discussion
+Considering which of the three options to select:
 
+-Option 1 is clearly not correct because crowding the room means the guests could break the vase.<br>
+-Option 2 is a decent option because no guests waste their time waiting in line and can do other things. However, It is not guaranteed that all guests will be able to see the vase, and there are times when no one is viewing the vase, which is inefficient when trying to show it to as many people as possible.<br>
+-Option 3 is good because all guests are able to see the vase, and there is no time in which the vase is not being viewed. The downside is that guests waste time waiting in line when they can be doing other things. Overall, I think option 3 has the best protocol.<br>
 
 ### Implementation
-
+Each guest is represented by a thread object and is placed into a queue at the beginning of execution. The master thread continuously removes guests from the head of the queue, starts execution and waits for them to finish before next guest is sent inside. It uses the join() method to wait for the thread to complete execution. join() internally handles locking the resource. I made each thread have a random chance of re-entering the queue after viewing based on the amount of times it has viewed.
 
 ### Evaluation / Experimentation
+
+I ran the program at 5 different levels of N and plotted points to look for a pattern.
+
+| N       | avg time (sec) |
+| :---    |    ----:   |
+| 1       |  0.0095275    |
+| 100     | 0.0539571      |
+| 1000    | 0.344701   |
+|5000 | 1.6741268 | 
+|10000|  4.2551401 |
+
+Processor: Intel i5 8250U @1.6GHz, 4 Cores
+
+The run time seems to be O(N) on average.
